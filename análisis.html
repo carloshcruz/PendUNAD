@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <title>Análisis WPA</title>
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i" />
+  <link rel="stylesheet" href="assets/fonts/simple-line-icons.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
+  <link rel="stylesheet" href="assets/css/untitled.css" />
+  <link rel="stylesheet" href="assets/css/vanilla-zoom.min.css" />
+  <link rel="stylesheet" href="assets/css/Reading-csv.css" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+  <style type="text/css">
+    #medias th {
+      text-align: right;
+    }
+
+    #medias td {
+      text-align: left;
+    }
+
+    #varfisicas {
+      margin: auto;
+    }
+
+    #varfisicas p {
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-light navbar-expand-lg bg-light clean-navbar" style="
+        background: url('https://cdn.bootstrapstudio.io/placeholders/1400x800.png');
+      ">
+    <div class="container-fluid">
+      <a class="navbar-brand logo" href="#"><img class="img-fluid" src="assets/img/unad-logo.png" width="50 px" />&nbsp;
+        &nbsp;PendUNAD</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+        <span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navcol-1">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">INICIO WPA</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Ingreso%20WPA.html">INGRESO WPA</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="análisis.html">ANÁLISIS WPA</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about-us.html">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact-us.html">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main class="page pricing-table-page">
+    <section class="clean-block clean-pricing dark">
+      <div class="container">
+        <div class="block-heading">
+          <h2 class="text-info">
+            Análisis Físico, Estadístico y Experimental<br />
+          </h2>
+          <p>
+            Para realizar el análisis de los datos obtenidos, tomamos&nbsp;la
+            plantilla .<strong><em>csv</em></strong> obtenida y descargada del
+            laboratorio remoto World Pendulum Aliance la cual usaremos de la
+            siguiente forma:
+          </p>
+        </div>
+        <hr>
+
+        <section class="reading-csv">
+          <div class="container">
+            <div class="block-heading">
+              <div class="row">
+                <div class="col"></div>
+                <h2 class="text-info">
+                  Lectura Plantilla .CSV<br />
+                </h2>
+
+                <form id="myForm">
+                  <div class="mb-3">
+                    <label class="form-label" for="formFile">Sube un Archivo <b>.csv</b></label>
+                    <input class="form-control" name="csvFile" id="csvFile" type="file" accept=".csv" required="">
+                  </div>
+              </div>
+
+              <br />
+              <div style="
+                          padding: 10px;
+                          display: inline-grid;
+                          text-align: left;
+                        ">
+                <label for="numero">Péndulo Seleccionado: </label>
+                <select name="pend" id="pend" required="">
+                  <option value="UNAD">UNAD</option>
+                  <option value="UniAndes">UniAndes</option>
+                  <option value="Marseille">Marseille</option>
+                  <option value="RiodeJaneiro">Rio de Janeiro</option>
+                  <option value="SantiagodeChile">
+                    Santiago de Chile
+                  </option>
+                  <option value="Valparaiso">Valparaiso</option>
+                  <option value="Panama-UTP">Panama-UTP</option>
+                  <option value="PanamaUsma">Panama Usma</option>
+                  <option value="Faro">Faro</option>
+                  <option value="Maputo">Maputo</option>
+                  <option value="Brasilia">Brasilia</option>
+                  <option value="UESC">UESC</option>
+                  <option value="Praga-UniCV">Praga - UniCV</option>
+                  <option value="Puntaarenas">Punta arenas</option>
+                  <option value="Rio-SaoToma">Rio - Sao Toma</option>
+                  <option value="Lisboa">Lisboa</option>
+                </select>
+              </div>
+
+              <br />
+              <div style="
+                          padding: 10px;
+                          display: inline-grid;
+                          text-align: left;
+                        ">
+                <label for="numero">Ingresa número de deslocamiento (cm):
+                </label>
+                <input name="cmDesloc" id="cmDesloc" type="number" value="20" required="" />
+              </div>
+              <div style="padding: 10px">
+                <input button class="btn btn-primary" type="submit" value="Cargar" />
+              </div>
+              </form>
+        </section>
+        <hr>
+
+        <br /> <!-- Tabla de datos calculo medias de medidas fisicas -->
+        <div class="block-heading">
+          <h3 class="text-info">Tabla de Datos Análisis Estadístico</h3>
+        </div>
+        <p class="texto-justificado">
+          Análisis estadístico de los datos obtenidos teniendo en cuenta las siguientes variables físicas: <b>M</b>=
+          Muestra, <span style="border-top: 1px solid"> <b>P</b></span>= Valor medio del período, <span
+            style="border-top: 1px solid"><b>dP</b></span>= Valor medio de
+          la incertidumbre del período, <span style="border-top: 1px solid"> <b>V</b></span>= Valor medio de la
+          velocidad, <span style="border-top: 1px solid"><b>dV</b></span>= Valor medio de la incertidumbre de la
+          velocidad, <span style="border-top: 1px solid"> <b>T</b></span>= Valor de la temperatura.
+        </p>
+        <br />
+        <div class="row">
+          <div class="col">
+            <div style="
+            border: 1px solid;
+            width: auto;
+            padding: 20px;
+            margin-top: 10px;
+            display: run-in">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped border-primary" id="medias">
+                  <tbody>
+                    <tr>
+                      <th>
+                        <p><span>M</span>:</p>
+                      </th>
+                      <td>
+                        <p id="valMed_m">-</p>
+                      </td>
+                      <th>
+                        <p><span style="border-top: 1px solid">P</span>:</p>
+                      </th>
+                      <td>
+                        <p id="valMed_p">-</p>
+                      </td>
+
+                      <th>
+                        <p>
+                          <span style="border-top: 1px solid">dP</span>:
+                        </p>
+                      </th>
+                      <td>
+                        <p id="valMed_dp">-</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <p><span style="border-top: 1px solid">V</span>:</p>
+                      </th>
+                      <td>
+                        <p id="valMed_V">-</p>
+                      </td>
+
+                      <th>
+                        <p>
+                          <span style="border-top: 1px solid">dV</span>:
+                        </p>
+                      </th>
+                      <td>
+                        <p id="valMed_dV">-</p>
+                      </td>
+
+                      <th>
+                        <p><span style="border-top: 1px solid">T</span>:</p>
+                      </th>
+                      <td>
+                        <p id="valMed_T">-</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <br>
+          <br /> <!-- Tabla de datos calculo variables fisicas -->
+
+          <div class="block-heading">
+            <h3 class="text-info">Tabla de Datos de Variables Físicas</h3>
+          </div>
+          <p class="texto-justificado">
+            Valores de las variables físicas obtenidas en el experimento las cuales son insumo del análisis estadístico
+            estas variables son: arco, longitud neta, ángulo de oscilación, altura de lanzamiento, gravedad y gravedad
+            vs.
+            periodo.
+          </p>
+          <br />
+          <div class="row">
+            <div class="col">
+              <div style="
+                      border: 1px solid;
+                      width: auto;
+                      padding: 20px;
+                      margin-top: 10px;
+                      display: run-in;
+                    " id="contvarfisicas">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped border-primary" id="varfisicas">
+
+                    <tbody>
+                      <tr>
+                        <th>
+                          <p>Arco:</p>
+                        </th>
+                        <td>
+                          <p id="valA">-</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <p>Longitud Neta:</p>
+                        </th>
+                        <td>
+                          <p id="valLN">-</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <p>Angulo Oscilación:</p>
+                        </th>
+                        <td>
+                          <p id="valAO">-</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <p><span>Altura Lanzamiento</span>:</p>
+                        </th>
+                        <td>
+                          <p id="valAL">-</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <p><span>Gravedad</span>:</p>
+                        </th>
+                        <td>
+                          <p id="valg">-</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <p>Gravedad / Periodo:</p>
+                        </th>
+                        <td>
+                          <p id="valGP">-</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <hr>
+              <br /> <!-- Tabla de datos calculo variables fisicas -->
+              <div class="block-heading">
+                <h3 class="text-info">Gráficas de las Variables Físicas del Experimento</h3>
+              </div>
+              <p class="texto-justificado">
+                Generación de gráficas con los datos analizados y procesados de las variables físicas del experimento
+                como
+                son
+                la temperatura, velocidad lineal, temperatura vs. velocidad, muestra vs. periodo.
+              </p>
+              <br />
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <div id="contgraficas" style="
+                      text-align: left;
+                      padding: 20px;
+                      margin-top: 10px;
+                      display: run-in;
+                    ">
+
+                      <h5><strong>Gráfica 1 - Temperatura [°C]</strong></h5>
+                    </div>
+                    <canvas id="myChart" width="300" height="300" style="border: 1px solid"></canvas>
+                    <hr><br />
+                    <div class="col">
+                      <h5><strong>Gráfica 2 - Velocidad [cm/s]</strong></h5>
+                      <canvas id="myChart2" width="300" height="300" style="border: 1px solid"></canvas>
+                      <hr><br />
+                      <div class="col">
+                        <h5><strong>Gráfica 3 - Temperatura vs. Velocidad [°C*cm/s]</strong></h5>
+                        <canvas id="myChart3" width="300" height="300" style="border: 1px solid"></canvas>
+                        <hr><br />
+                        <div class="col">
+                          <h5><strong>Gráfica 4 - Muestra vs. Periodo</strong></h5>
+                          <canvas id="myChart4" width="300" height="300" style="border: 1px solid"></canvas>
+                        </div>
+                      </div>
+                      <script>
+                        let datacsv = {};
+
+                        const myForm = document.getElementById("myForm");
+                        const csvFile = document.getElementById("csvFile");
+
+                        function csvToArray(str, delimiter = ",") {
+                          // slice from start of text to the first \n index
+                          // use split to create an array from string by delimiter
+                          const headers = str
+                            .slice(0, str.indexOf("\n"))
+                            .split(delimiter);
+
+                          // slice from \n index + 1 to the end of the text
+                          // use split to create an array of each csv value row
+                          const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+
+                          // Map the rows
+                          // split values from each row into an array
+                          // use headers.reduce to create an object
+                          // object properties derived from headers:values
+                          // the object passed as an element of the array
+                          const arr = rows.map(function (row) {
+                            const values = row.split(delimiter);
+                            const el = headers.reduce(function (
+                              object,
+                              header,
+                              index
+                            ) {
+                              //console.log(values[index]);
+                              try {
+                                object[index] = values[index].replace("\r", "");
+                              } catch (error) {
+                                object[index] = values[index];
+                              }
+                              return object;
+                            },
+                              {});
+                            return el;
+                          });
+
+                          // return the array
+                          return arr;
+                        }
+
+                        myForm.addEventListener(
+                          "submit",
+                          function (e) {
+                            e.preventDefault();
+                            const input = csvFile.files[0];
+                            const reader = new FileReader();
+
+                            reader.onload = function (e) {
+                              const text = e.target.result;
+                              const data = csvToArray(text);
+                              let dataarr = JSON.stringify(data);
+                              datacsv = JSON.parse(dataarr);
+                              //  console.log(JSON.parse(dataarr));
+
+                              calculaMedias();
+                              calculaVariablesFisicas();
+                              $("#contgraficas").show();
+                              graficar1();
+                              graficar2();
+                              graficar3();
+                              graficar4();
+                            };
+
+                            reader.readAsText(input);
+                          },
+                          false
+                        );
+
+                        //************************************************************************
+                        /*
+                 
+                0: Amostra [N], M
+                1: Período [seg], P
+                2: ? Período [seg], dP
+                3: Velocidad lineal [cm/s], V 
+                4: ? Velocidade lineal [cm/s], dV
+                5: Temperatura [ºC] T
+                */
+
+                        function calculaMedias() {
+                          $("#contmedias").show();
+
+                          let m = datacsv.map((e) => e[0]).length - 1; // 100
+
+                          let sumP = 0;
+                          let sumdP = 0;
+                          let sumv = 0;
+                          let sumdv = 0;
+                          let sumt = 0;
+
+                          datacsv.forEach((e) => {
+                            if (e[1] != undefined) sumP = sumP + parseFloat(e[1]);
+                            if (e[2] != undefined) sumdP = sumdP + parseFloat(e[2]);
+                            if (e[3] != undefined) sumv = sumv + parseFloat(e[3]);
+                            if (e[4] != undefined) sumdv = sumdv + parseFloat(e[4]);
+                            if (e[5] != undefined) sumt = sumt + parseFloat(e[5]);
+                          });
+
+                          let med_p = sumP / m;
+                          let med_dp = sumdP / m;
+                          let med_v = sumv / m;
+                          let med_dv = sumdv / m;
+                          let med_t = sumt / m;
+
+                          $("#valMed_m").text(m);
+                          $("#valMed_p").text(med_p);
+                          $("#valMed_dp").text(med_dp);
+                          $("#valMed_V").text(med_v);
+                          $("#valMed_dV").text(med_dv);
+                          $("#valMed_T").text(med_t);
+                        }
+
+                        function calculaVariablesFisicas() {
+                          $("#contvarfisicas").show();
+
+                          let cmDesloc = parseFloat($("#cmDesloc").val());
+                          let Pend = $("#pend").val();
+
+                          let valA = cmDesloc * 0.91;
+
+                          let L = 0;
+                          let d = 0;
+                          let Lneta = 0;
+
+                          switch (Pend) {
+                            case "UNAD":
+                              L = 2815;
+                              d = 82;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "UniAndes":
+                              L = 2815.3;
+                              d = 82;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Marseille":
+                              L = 2811;
+                              d = 82;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "RiodeJaneiro":
+                              L = 2826;
+                              d = 81.6;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "SantiagodeChile":
+                              L = 2825;
+                              d = 81.9;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Valparaiso":
+                              L = 2827.5;
+                              d = 81.8;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Panama-UTP":
+                              L = 2825;
+                              d = 81.9;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "PanamaUsma":
+                              L = 2800;
+                              d = 81.8;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Faro":
+                              L = 2677;
+                              d = 80.5;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Maputo":
+                              L = 2609.8;
+                              d = 80.5;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Brasilia":
+                              L = 2826.8;
+                              d = 81.4;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "UESC":
+                              L = 2705;
+                              d = 80.5;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Praga-UniCV":
+                              L = 2826;
+                              d = 81.6;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Puntaarenas":
+                              L = 2858.5;
+                              d = 81.7;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Rio-SaoToma":
+                              L = 2756.5;
+                              d = 81.8;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            case "Lisboa":
+                              L = 2677;
+                              d = 80.5;
+                              Lneta = (L + d / 2) * (1 / 1000);
+                              break;
+
+                            default:
+                              break;
+                          }
+
+                          let valAO = Math.acosh(valA / Lneta);
+
+                          let valAL = Lneta * (1 - Math.cos(valAO));
+
+                          let m = datacsv.map((e) => e[0]).length - 1; // 100
+                          let sumP = 0;
+
+                          datacsv.forEach((e) => {
+                            if (e[1] != undefined) sumP = sumP + parseFloat(e[1]);
+                          });
+
+                          let med_p = sumP / m;
+
+                          let valg = (0.5 * Math.pow(med_p / 100, 2)) / (valAL / 100);
+
+                          let valGP =
+                            (4 * Math.pow(Math.PI, 2) * Lneta) / Math.pow(med_p, 2);
+
+                          $("#valA").text(valA);
+                          $("#valLN").text(Lneta);
+                          $("#valAO").text(valAO);
+                          $("#valAL").text(valAL);
+                          $("#valg").text(valg);
+                          $("#valGP").text(valGP);
+                        }
+
+                        function graficar1() {
+                          // TEMPERATURA CON MUESTRA T Y M
+                          let arr = datacsv;
+
+                          const ctx = document
+                            .getElementById("myChart")
+                            .getContext("2d");
+                          const myChart = new Chart(ctx, {
+                            type: "line",
+                            data: {
+                              labels: arr.map((e) => e[0]),
+                              datasets: [
+                                {
+                                  label: "Temperatura [ºC]",
+                                  data: arr.map((e) => e[5]),
+                                  backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+                                  borderColor: ["rgba(255, 99, 132, 1)"],
+                                  borderWidth: 1,
+                                },
+                              ],
+                            },
+                            options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: false,
+                                },
+                              },
+                            },
+                          });
+                        }
+
+                        function graficar2() {
+                          // VELOCIDAD CON MUESTRA V Y M
+                          let arr = datacsv;
+
+                          const ctx = document
+                            .getElementById("myChart2")
+                            .getContext("2d");
+                          const myChart = new Chart(ctx, {
+                            type: "bar",
+                            data: {
+                              labels: arr.map((e) => e[0]),
+                              datasets: [
+                                {
+                                  label: "Velocidade lineal [cm/s]",
+                                  data: arr.map((e) => e[3]),
+                                  backgroundColor: ["rgba(54, 162, 235, 0.2)"],
+                                  borderColor: ["rgba(54, 162, 235, 1)"],
+                                  borderWidth: 1,
+                                },
+                              ],
+                            },
+                            options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: false,
+                                },
+                              },
+                            },
+                          });
+                        }
+
+                        function graficar3() {
+                          // VELOCIDAD CON MUESTRA V Y t
+                          let arr = datacsv;
+
+                          const ctx = document
+                            .getElementById("myChart3")
+                            .getContext("2d");
+                          const myChart = new Chart(ctx, {
+                            type: "scatter",
+                            data: {
+                              labels: arr.map((e) => e[5]),
+                              datasets: [
+                                {
+                                  label: "Temperatura / Velocidad",
+                                  data: arr.map((e) => e[3]),
+                                  backgroundColor: ["rgba(255, 206, 86, 0.2)"],
+                                  borderColor: ["rgba(255, 206, 86, 1)"],
+                                  borderWidth: 1,
+                                },
+                              ],
+                            },
+                            options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: false,
+                                },
+                              },
+                            },
+                          });
+                        }
+
+                        function graficar4() {
+                          // VELOCIDAD CON MUESTRA M y P
+                          let arr = datacsv;
+
+                          const ctx = document
+                            .getElementById("myChart4")
+                            .getContext("2d");
+                          const myChart = new Chart(ctx, {
+                            type: "bubble",
+                            data: {
+                              labels: arr.map((e) => e[0]),
+                              datasets: [
+                                {
+                                  label: "Muestra / Periodo",
+                                  data: arr.map((e) => e[1]),
+                                  backgroundColor: ["rgba(75, 192, 192, 0.2)"],
+                                  borderColor: ["rgba(75, 192, 192, 1)"],
+                                  borderWidth: 1,
+                                },
+                              ],
+                            },
+                            options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: false,
+                                },
+                              },
+                            },
+                          });
+                        }
+                      </script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    </section>
+  </main>
+  <footer class="page-footer dark">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <ul>
+            <div class="site logo">
+              <span class="custom-logo">
+                <img width="100%" height="100%" src="assets/img/index/LogoPendunad.png" alt="">
+              </span>
+            </div>
+          </ul>
+        </div>
+        <div class="col-sm-3">
+
+          <ul>
+
+          </ul>
+        </div>
+        <div class="col-sm-3">
+          <h5>About us</h5>
+          <ul>
+            <li><a href="#">Información</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="#">Nosotros</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-3">
+          <h5>Legal</h5>
+          <ul>
+            <li><a href="#">Información</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="#">Nosotros</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-copyright">
+      <p style="text-align: center;"><br>© 2022 by Carlos Hernán Cruz López - "Aplicativo&nbsp; PendUNAD" -&nbsp;
+        Universidad Nacional Abierta y a Distancia - UNAD<br><br></p>
+    </div>
+  </footer>
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+  <script src="assets/js/vanilla-zoom.js"></script>
+  <script src="assets/js/theme.js"></script>
+</body>
+
+</html>
