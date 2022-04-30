@@ -2,11 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Escuchamos el click del botón
   const $boton = document.querySelector("#btnCrearPdf");
   $boton.addEventListener("click", () => {
-    const $elementoParaConvertir = document.body; // <-- Aquí puedes elegir cualquier elemento del DOM
+    const $elementoParaConvertir = document.body; // <-- Elegir cualquier elemento del DOM
     html2pdf()
       .set({
         margin: 1,
-        filename: "documento.pdf",
+        filename: "PendUNAD_Laboratorio.pdf",
         image: {
           type: "jpeg",
           quality: 0.98,
