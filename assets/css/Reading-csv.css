@@ -58,3 +58,28 @@
   margin-top: 15px;
   color: #fff;
 }
+
+#myChart{
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid #383737;
+}
+#myChart2{
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid #383737;
+}
+#myChart3{
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid #383737;
+}
+#myChart4{
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid #383737;
+}

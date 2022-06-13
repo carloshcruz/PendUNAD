@@ -14,11 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
         html2canvas: {
           scale: 3, // A mayor escala, mejores gráficos, pero más peso
           letterRendering: true,
+          useCORS: true,
         },
         jsPDF: {
           unit: "in",
           format: "a3",
           orientation: "portrait", // landscape o portrait
+        },
+        pagebreak: {
+          mode: ["avoid-all", "css", "legacy"],
+          before: "#pageX",
         },
       })
       .from($elementoParaConvertir)
