@@ -339,397 +339,396 @@
                           <canvas id="myChart4" width="300" height="300" style="border: 1px solid"></canvas>
                         </div>
                         <br>
+                        <div><strong class="text-danger"> Presiona el siguiente botón para crear un PDF del
+                            experimento:</strong> <button class="btn btn-danger" type="submit" id="printbutton">Click
+                            aquí</button></div>
+
                         <div>
-                          <strong class="text-danger"> Presiona el siguiente botón para crear un PDF del
-                            experimento:</strong>
-                          <button class="btn btn-danger" type="submit" id="btnCrearPdf">Click aquí</button>
+                          <script>
+
+                            let datacsv = {};
+
+                            const myForm = document.getElementById("myForm");
+                            const csvFile = document.getElementById("csvFile");
+
+                            function csvToArray(str, delimiter = ",") {
+                              // slice from start of text to the first \n index
+                              // use split to create an array from string by delimiter
+                              const headers = str
+                                .slice(0, str.indexOf("\n"))
+                                .split(delimiter);
+
+                              // slice from \n index + 1 to the end of the text
+                              // use split to create an array of each csv value row
+                              const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+
+                              // Map the rows
+                              // split values from each row into an array
+                              // use headers.reduce to create an object
+                              // object properties derived from headers:values
+                              // the object passed as an element of the array
+                              const arr = rows.map(function (row) {
+                                const values = row.split(delimiter);
+                                const el = headers.reduce(function (
+                                  object,
+                                  header,
+                                  index
+                                ) {
+                                  //console.log(values[index]);
+                                  try {
+                                    object[index] = values[index].replace("\r", "");
+                                  } catch (error) {
+                                    object[index] = values[index];
+                                  }
+                                  return object;
+                                },
+                                  {});
+                                return el;
+                              });
+
+                              // return the array
+                              return arr;
+                            }
+
+                            myForm.addEventListener(
+                              "submit",
+                              function (e) {
+                                e.preventDefault();
+                                const input = csvFile.files[0];
+                                const reader = new FileReader();
+
+                                reader.onload = function (e) {
+                                  const text = e.target.result;
+                                  const data = csvToArray(text);
+                                  let dataarr = JSON.stringify(data);
+                                  datacsv = JSON.parse(dataarr);
+                                  //  console.log(JSON.parse(dataarr));
+
+                                  calculaMedias();
+                                  calculaVariablesFisicas();
+                                  $("#contgraficas").show();
+                                  graficar1();
+                                  graficar2();
+                                  graficar3();
+                                  graficar4();
+                                };
+
+                                reader.readAsText(input);
+                              },
+                              false
+                            );
+
+                            //************************************************************************
+                            /*
+                     
+                    0: Amostra [N], M
+                    1: Período [seg], P
+                    2: ? Período [seg], dP
+                    3: Velocidad lineal [cm/s], V 
+                    4: ? Velocidade lineal [cm/s], dV
+                    5: Temperatura [ºC] T
+                    */
+
+                            function calculaMedias() {
+                              $("#contmedias").show();
+
+                              let m = datacsv.map((e) => e[0]).length - 1; // 100
+
+                              let sumP = 0;
+                              let sumdP = 0;
+                              let sumv = 0;
+                              let sumdv = 0;
+                              let sumt = 0;
+
+                              datacsv.forEach((e) => {
+                                if (e[1] != undefined) sumP = sumP + parseFloat(e[1]);
+                                if (e[2] != undefined) sumdP = sumdP + parseFloat(e[2]);
+                                if (e[3] != undefined) sumv = sumv + parseFloat(e[3]);
+                                if (e[4] != undefined) sumdv = sumdv + parseFloat(e[4]);
+                                if (e[5] != undefined) sumt = sumt + parseFloat(e[5]);
+                              });
+
+                              let med_p = sumP / m;
+                              let med_dp = sumdP / m;
+                              let med_v = sumv / m;
+                              let med_dv = sumdv / m;
+                              let med_t = sumt / m;
+
+                              $("#valMed_m").text(m);
+                              $("#valMed_p").text(med_p);
+                              $("#valMed_dp").text(med_dp);
+                              $("#valMed_V").text(med_v);
+                              $("#valMed_dV").text(med_dv);
+                              $("#valMed_T").text(med_t);
+                            }
+
+                            function calculaVariablesFisicas() {
+                              $("#contvarfisicas").show();
+
+                              let cmDesloc = parseFloat($("#cmDesloc").val());
+                              let Pend = $("#pend").val();
+
+                              let valA = cmDesloc * 0.91;
+
+                              let L = 0;
+                              let d = 0;
+                              let Lneta = 0;
+
+                              switch (Pend) {
+                                case "UNAD":
+                                  L = 2815;
+                                  d = 82;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "UniAndes":
+                                  L = 2815.3;
+                                  d = 82;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Marseille":
+                                  L = 2811;
+                                  d = 82;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "RiodeJaneiro":
+                                  L = 2826;
+                                  d = 81.6;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "SantiagodeChile":
+                                  L = 2825;
+                                  d = 81.9;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Valparaiso":
+                                  L = 2827.5;
+                                  d = 81.8;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Panama-UTP":
+                                  L = 2825;
+                                  d = 81.9;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "PanamaUsma":
+                                  L = 2800;
+                                  d = 81.8;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Faro":
+                                  L = 2677;
+                                  d = 80.5;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Maputo":
+                                  L = 2609.8;
+                                  d = 80.5;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Brasilia":
+                                  L = 2826.8;
+                                  d = 81.4;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "UESC":
+                                  L = 2705;
+                                  d = 80.5;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Praga-UniCV":
+                                  L = 2826;
+                                  d = 81.6;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Puntaarenas":
+                                  L = 2858.5;
+                                  d = 81.7;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Rio-SaoToma":
+                                  L = 2756.5;
+                                  d = 81.8;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                case "Lisboa":
+                                  L = 2677;
+                                  d = 80.5;
+                                  Lneta = (L + d / 2) * (1 / 1000);
+                                  break;
+
+                                default:
+                                  break;
+                              }
+
+                              let valAO = Math.acosh(valA / Lneta);
+
+                              let valAL = Lneta * (1 - Math.cos(valAO));
+
+                              let m = datacsv.map((e) => e[0]).length - 1; // 100
+                              let sumP = 0;
+
+                              datacsv.forEach((e) => {
+                                if (e[1] != undefined) sumP = sumP + parseFloat(e[1]);
+                              });
+
+                              let med_p = sumP / m;
+
+                              let valg = (0.5 * Math.pow(med_p / 100, 2)) / (valAL / 100);
+
+                              let valGP =
+                                (4 * Math.pow(Math.PI, 2) * Lneta) / Math.pow(med_p, 2);
+
+                              $("#valA").text(valA);
+                              $("#valLN").text(Lneta);
+                              $("#valAO").text(valAO);
+                              $("#valAL").text(valAL);
+                              $("#valg").text(valg);
+                              $("#valGP").text(valGP);
+                            }
+
+                            function graficar1() {
+                              // TEMPERATURA CON MUESTRA T Y M
+                              let arr = datacsv;
+
+                              const ctx = document
+                                .getElementById("myChart")
+                                .getContext("2d");
+                              const myChart = new Chart(ctx, {
+                                type: "line",
+                                data: {
+                                  labels: arr.map((e) => e[0]),
+                                  datasets: [
+                                    {
+                                      label: "Temperatura [ºC]",
+                                      data: arr.map((e) => e[5]),
+                                      backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+                                      borderColor: ["rgba(255, 99, 132, 1)"],
+                                      borderWidth: 1,
+                                    },
+                                  ],
+                                },
+                                options: {
+                                  scales: {
+                                    y: {
+                                      beginAtZero: false,
+                                    },
+                                  },
+                                },
+                              });
+                            }
+
+                            function graficar2() {
+                              // VELOCIDAD CON MUESTRA V Y M
+                              let arr = datacsv;
+
+                              const ctx = document
+                                .getElementById("myChart2")
+                                .getContext("2d");
+                              const myChart = new Chart(ctx, {
+                                type: "bar",
+                                data: {
+                                  labels: arr.map((e) => e[0]),
+                                  datasets: [
+                                    {
+                                      label: "Velocidade lineal [cm/s]",
+                                      data: arr.map((e) => e[3]),
+                                      backgroundColor: ["rgba(54, 162, 235, 0.2)"],
+                                      borderColor: ["rgba(54, 162, 235, 1)"],
+                                      borderWidth: 1,
+                                    },
+                                  ],
+                                },
+                                options: {
+                                  scales: {
+                                    y: {
+                                      beginAtZero: false,
+                                    },
+                                  },
+                                },
+                              });
+                            }
+
+                            function graficar3() {
+                              // VELOCIDAD CON MUESTRA V Y t
+                              let arr = datacsv;
+
+                              const ctx = document
+                                .getElementById("myChart3")
+                                .getContext("2d");
+                              const myChart = new Chart(ctx, {
+                                type: "scatter",
+                                data: {
+                                  labels: arr.map((e) => e[5]),
+                                  datasets: [
+                                    {
+                                      label: "Temperatura / Velocidad",
+                                      data: arr.map((e) => e[3]),
+                                      backgroundColor: ["rgba(255, 206, 86, 0.2)"],
+                                      borderColor: ["rgba(255, 206, 86, 1)"],
+                                      borderWidth: 1,
+                                    },
+                                  ],
+                                },
+                                options: {
+                                  scales: {
+                                    y: {
+                                      beginAtZero: false,
+                                    },
+                                  },
+                                },
+                              });
+                            }
+
+                            function graficar4() {
+                              // VELOCIDAD CON MUESTRA M y P
+                              let arr = datacsv;
+
+                              const ctx = document
+                                .getElementById("myChart4")
+                                .getContext("2d");
+                              const myChart = new Chart(ctx, {
+                                type: "bubble",
+                                data: {
+                                  labels: arr.map((e) => e[0]),
+                                  datasets: [
+                                    {
+                                      label: "Muestra / Periodo",
+                                      data: arr.map((e) => e[1]),
+                                      backgroundColor: ["rgba(75, 192, 192, 0.2)"],
+                                      borderColor: ["rgba(75, 192, 192, 1)"],
+                                      borderWidth: 1,
+                                    },
+                                  ],
+                                },
+                                options: {
+                                  scales: {
+                                    y: {
+                                      beginAtZero: false,
+                                    },
+                                  },
+                                },
+                              });
+                            }
+                          </script>
                         </div>
                       </div>
-                      <script>
-
-                        let datacsv = {};
-
-                        const myForm = document.getElementById("myForm");
-                        const csvFile = document.getElementById("csvFile");
-
-                        function csvToArray(str, delimiter = ",") {
-                          // slice from start of text to the first \n index
-                          // use split to create an array from string by delimiter
-                          const headers = str
-                            .slice(0, str.indexOf("\n"))
-                            .split(delimiter);
-
-                          // slice from \n index + 1 to the end of the text
-                          // use split to create an array of each csv value row
-                          const rows = str.slice(str.indexOf("\n") + 1).split("\n");
-
-                          // Map the rows
-                          // split values from each row into an array
-                          // use headers.reduce to create an object
-                          // object properties derived from headers:values
-                          // the object passed as an element of the array
-                          const arr = rows.map(function (row) {
-                            const values = row.split(delimiter);
-                            const el = headers.reduce(function (
-                              object,
-                              header,
-                              index
-                            ) {
-                              //console.log(values[index]);
-                              try {
-                                object[index] = values[index].replace("\r", "");
-                              } catch (error) {
-                                object[index] = values[index];
-                              }
-                              return object;
-                            },
-                              {});
-                            return el;
-                          });
-
-                          // return the array
-                          return arr;
-                        }
-
-                        myForm.addEventListener(
-                          "submit",
-                          function (e) {
-                            e.preventDefault();
-                            const input = csvFile.files[0];
-                            const reader = new FileReader();
-
-                            reader.onload = function (e) {
-                              const text = e.target.result;
-                              const data = csvToArray(text);
-                              let dataarr = JSON.stringify(data);
-                              datacsv = JSON.parse(dataarr);
-                              //  console.log(JSON.parse(dataarr));
-
-                              calculaMedias();
-                              calculaVariablesFisicas();
-                              $("#contgraficas").show();
-                              graficar1();
-                              graficar2();
-                              graficar3();
-                              graficar4();
-                            };
-
-                            reader.readAsText(input);
-                          },
-                          false
-                        );
-
-                        //************************************************************************
-                        /*
-                 
-                0: Amostra [N], M
-                1: Período [seg], P
-                2: ? Período [seg], dP
-                3: Velocidad lineal [cm/s], V 
-                4: ? Velocidade lineal [cm/s], dV
-                5: Temperatura [ºC] T
-                */
-
-                        function calculaMedias() {
-                          $("#contmedias").show();
-
-                          let m = datacsv.map((e) => e[0]).length - 1; // 100
-
-                          let sumP = 0;
-                          let sumdP = 0;
-                          let sumv = 0;
-                          let sumdv = 0;
-                          let sumt = 0;
-
-                          datacsv.forEach((e) => {
-                            if (e[1] != undefined) sumP = sumP + parseFloat(e[1]);
-                            if (e[2] != undefined) sumdP = sumdP + parseFloat(e[2]);
-                            if (e[3] != undefined) sumv = sumv + parseFloat(e[3]);
-                            if (e[4] != undefined) sumdv = sumdv + parseFloat(e[4]);
-                            if (e[5] != undefined) sumt = sumt + parseFloat(e[5]);
-                          });
-
-                          let med_p = sumP / m;
-                          let med_dp = sumdP / m;
-                          let med_v = sumv / m;
-                          let med_dv = sumdv / m;
-                          let med_t = sumt / m;
-
-                          $("#valMed_m").text(m);
-                          $("#valMed_p").text(med_p);
-                          $("#valMed_dp").text(med_dp);
-                          $("#valMed_V").text(med_v);
-                          $("#valMed_dV").text(med_dv);
-                          $("#valMed_T").text(med_t);
-                        }
-
-                        function calculaVariablesFisicas() {
-                          $("#contvarfisicas").show();
-
-                          let cmDesloc = parseFloat($("#cmDesloc").val());
-                          let Pend = $("#pend").val();
-
-                          let valA = cmDesloc * 0.91;
-
-                          let L = 0;
-                          let d = 0;
-                          let Lneta = 0;
-
-                          switch (Pend) {
-                            case "UNAD":
-                              L = 2815;
-                              d = 82;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "UniAndes":
-                              L = 2815.3;
-                              d = 82;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Marseille":
-                              L = 2811;
-                              d = 82;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "RiodeJaneiro":
-                              L = 2826;
-                              d = 81.6;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "SantiagodeChile":
-                              L = 2825;
-                              d = 81.9;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Valparaiso":
-                              L = 2827.5;
-                              d = 81.8;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Panama-UTP":
-                              L = 2825;
-                              d = 81.9;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "PanamaUsma":
-                              L = 2800;
-                              d = 81.8;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Faro":
-                              L = 2677;
-                              d = 80.5;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Maputo":
-                              L = 2609.8;
-                              d = 80.5;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Brasilia":
-                              L = 2826.8;
-                              d = 81.4;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "UESC":
-                              L = 2705;
-                              d = 80.5;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Praga-UniCV":
-                              L = 2826;
-                              d = 81.6;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Puntaarenas":
-                              L = 2858.5;
-                              d = 81.7;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Rio-SaoToma":
-                              L = 2756.5;
-                              d = 81.8;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            case "Lisboa":
-                              L = 2677;
-                              d = 80.5;
-                              Lneta = (L + d / 2) * (1 / 1000);
-                              break;
-
-                            default:
-                              break;
-                          }
-
-                          let valAO = Math.acosh(valA / Lneta);
-
-                          let valAL = Lneta * (1 - Math.cos(valAO));
-
-                          let m = datacsv.map((e) => e[0]).length - 1; // 100
-                          let sumP = 0;
-
-                          datacsv.forEach((e) => {
-                            if (e[1] != undefined) sumP = sumP + parseFloat(e[1]);
-                          });
-
-                          let med_p = sumP / m;
-
-                          let valg = (0.5 * Math.pow(med_p / 100, 2)) / (valAL / 100);
-
-                          let valGP =
-                            (4 * Math.pow(Math.PI, 2) * Lneta) / Math.pow(med_p, 2);
-
-                          $("#valA").text(valA);
-                          $("#valLN").text(Lneta);
-                          $("#valAO").text(valAO);
-                          $("#valAL").text(valAL);
-                          $("#valg").text(valg);
-                          $("#valGP").text(valGP);
-                        }
-
-                        function graficar1() {
-                          // TEMPERATURA CON MUESTRA T Y M
-                          let arr = datacsv;
-
-                          const ctx = document
-                            .getElementById("myChart")
-                            .getContext("2d");
-                          const myChart = new Chart(ctx, {
-                            type: "line",
-                            data: {
-                              labels: arr.map((e) => e[0]),
-                              datasets: [
-                                {
-                                  label: "Temperatura [ºC]",
-                                  data: arr.map((e) => e[5]),
-                                  backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-                                  borderColor: ["rgba(255, 99, 132, 1)"],
-                                  borderWidth: 1,
-                                },
-                              ],
-                            },
-                            options: {
-                              scales: {
-                                y: {
-                                  beginAtZero: false,
-                                },
-                              },
-                            },
-                          });
-                        }
-
-                        function graficar2() {
-                          // VELOCIDAD CON MUESTRA V Y M
-                          let arr = datacsv;
-
-                          const ctx = document
-                            .getElementById("myChart2")
-                            .getContext("2d");
-                          const myChart = new Chart(ctx, {
-                            type: "bar",
-                            data: {
-                              labels: arr.map((e) => e[0]),
-                              datasets: [
-                                {
-                                  label: "Velocidade lineal [cm/s]",
-                                  data: arr.map((e) => e[3]),
-                                  backgroundColor: ["rgba(54, 162, 235, 0.2)"],
-                                  borderColor: ["rgba(54, 162, 235, 1)"],
-                                  borderWidth: 1,
-                                },
-                              ],
-                            },
-                            options: {
-                              scales: {
-                                y: {
-                                  beginAtZero: false,
-                                },
-                              },
-                            },
-                          });
-                        }
-
-                        function graficar3() {
-                          // VELOCIDAD CON MUESTRA V Y t
-                          let arr = datacsv;
-
-                          const ctx = document
-                            .getElementById("myChart3")
-                            .getContext("2d");
-                          const myChart = new Chart(ctx, {
-                            type: "scatter",
-                            data: {
-                              labels: arr.map((e) => e[5]),
-                              datasets: [
-                                {
-                                  label: "Temperatura / Velocidad",
-                                  data: arr.map((e) => e[3]),
-                                  backgroundColor: ["rgba(255, 206, 86, 0.2)"],
-                                  borderColor: ["rgba(255, 206, 86, 1)"],
-                                  borderWidth: 1,
-                                },
-                              ],
-                            },
-                            options: {
-                              scales: {
-                                y: {
-                                  beginAtZero: false,
-                                },
-                              },
-                            },
-                          });
-                        }
-
-                        function graficar4() {
-                          // VELOCIDAD CON MUESTRA M y P
-                          let arr = datacsv;
-
-                          const ctx = document
-                            .getElementById("myChart4")
-                            .getContext("2d");
-                          const myChart = new Chart(ctx, {
-                            type: "bubble",
-                            data: {
-                              labels: arr.map((e) => e[0]),
-                              datasets: [
-                                {
-                                  label: "Muestra / Periodo",
-                                  data: arr.map((e) => e[1]),
-                                  backgroundColor: ["rgba(75, 192, 192, 0.2)"],
-                                  borderColor: ["rgba(75, 192, 192, 1)"],
-                                  borderWidth: 1,
-                                },
-                              ],
-                            },
-                            options: {
-                              scales: {
-                                y: {
-                                  beginAtZero: false,
-                                },
-                              },
-                            },
-                          });
-                        }
-                      </script>
                     </div>
                   </div>
-                </div>
-              </div>
     </section>
   </main>
   <footer class="page-footer dark">
@@ -784,6 +783,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+  <script src="assets/js/script_imp.js"></script>
 </body>
 
 </html>
