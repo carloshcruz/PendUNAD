@@ -454,12 +454,12 @@
                               let med_dv = sumdv / m;
                               let med_t = sumt / m;
 
-                              $("#valMed_m").text(m);
-                              $("#valMed_p").text(med_p);
-                              $("#valMed_dp").text(med_dp);
-                              $("#valMed_V").text(med_v);
-                              $("#valMed_dV").text(med_dv);
-                              $("#valMed_T").text(med_t);
+                              $("#valMed_m").text(m.toFixed(2));
+                              $("#valMed_p").text(med_p.toFixed(2));
+                              $("#valMed_dp").text(med_dp.toFixed(4));
+                              $("#valMed_V").text(med_v.toFixed(2));
+                              $("#valMed_dV").text(med_dv.toFixed(2));
+                              $("#valMed_T").text(med_t.toFixed(2));
                             }
 
                             function calculaVariablesFisicas() {
@@ -593,12 +593,12 @@
                               let valGP =
                                 (4 * Math.pow(Math.PI, 2) * Lneta) / Math.pow(med_p, 2);
 
-                              $("#valA").text(valA);
-                              $("#valLN").text(Lneta);
-                              $("#valAO").text(valAO);
-                              $("#valAL").text(valAL);
-                              $("#valg").text(valg);
-                              $("#valGP").text(valGP);
+                              $("#valA").text(valA.toFixed(2));
+                              $("#valLN").text(Lneta.toFixed(2));
+                              $("#valAO").text(valAO.toFixed(2));
+                              $("#valAL").text(valAL.toFixed(2));
+                              $("#valg").text(valg.toFixed(2));
+                              $("#valGP").text(valGP.toFixed(2));
                             }
 
                             function graficar1() {
